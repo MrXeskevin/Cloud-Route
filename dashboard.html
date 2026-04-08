@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Campus Connect</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+</head>
+<body class="dashboard-page">
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-lg sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="dashboard.html">
+                <i class="fas fa-bus-alt me-2 fs-4"></i>
+                <span class="fw-bold">Campus Connect</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="dashboard.html">
+                            <i class="fas fa-home me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="booking.html">
+                            <i class="fas fa-ticket-alt me-1"></i> Book Seat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="schedule.html">
+                            <i class="fas fa-clock me-1"></i> Schedules
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="report.html">
+                            <i class="fas fa-exclamation-triangle me-1"></i> Report Issue
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">
+                            <i class="fas fa-envelope me-1"></i> Contact
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" 
+                           data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> <span id="navUsername">Profile</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> My Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-history me-2"></i> My Bookings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1><i class="fas fa-tachometer-alt me-2"></i> Welcome Back, <span id="welcomeUsername">Student</span>!</h1>
+                    <p class="mb-0">Track buses in real-time and manage your bookings</p>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <button class="btn btn-light btn-lg" onclick="refreshMap()">
+                        <i class="fas fa-sync-alt me-2"></i> Refresh Map
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-5">
+        <div class="container">
+            
+            <!-- Stats Cards -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card primary">
+                        <div class="stat-icon">
+                            <i class="fas fa-bus"></i>
+                        </div>
+                        <div class="stat-number" id="activeBusesCount">5</div>
+                        <div class="stat-label">Active Buses</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card success">
+                        <div class="stat-icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <div class="stat-number" id="myBookingsCount">0</div>
+                        <div class="stat-label">My Bookings</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card warning">
+                        <div class="stat-icon">
+                            <i class="fas fa-route"></i>
+                        </div>
+                        <div class="stat-number" id="activeRoutesCount">4</div>
+                        <div class="stat-label">Active Routes</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card danger">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-number" id="nextBusTime">15 min</div>
+                        <div class="stat-label">Next Bus</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Bus Tracking Map -->
+            <div class="row mb-5">
+                <div class="col-12">
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-header bg-gradient text-white py-3" 
+                             style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0">
+                                    <i class="fas fa-map-marked-alt me-2"></i> Live Bus Tracking
+                                </h4>
+                                <div>
+                                    <button class="btn btn-light btn-sm me-2" onclick="centerMap()" 
+                                            data-bs-toggle="tooltip" title="Center Map">
+                                        <i class="fas fa-crosshairs"></i>
+                                    </button>
+                                    <button class="btn btn-light btn-sm" onclick="refreshMap()" 
+                                            data-bs-toggle="tooltip" title="Refresh">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <!-- Map Container -->
+                            <div class="map-container" id="map"></div>
+                        </div>
+                        <div class="card-footer bg-light">
+                            <div class="row text-center">
+                                <div class="col-md-6">
+                                    <i class="fas fa-circle text-danger me-2"></i>
+                                    <small><strong>Red Markers:</strong> Active Buses</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <i class="fas fa-circle text-primary me-2"></i>
+                                    <small><strong>Blue Markers:</strong> Pickup Points</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="row mb-5">
+                <div class="col-12 mb-4">
+                    <h3 class="text-gradient">
+                        <i class="fas fa-bolt me-2"></i> Quick Actions
+                    </h3>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <a href="booking.html" class="text-decoration-none">
+                        <div class="action-card">
+                            <div class="action-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <i class="fas fa-ticket-alt"></i>
+                            </div>
+                            <h5>Book a Seat</h5>
+                            <p>Reserve your seat on the next available bus</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <a href="schedule.html" class="text-decoration-none">
+                        <div class="action-card">
+                            <div class="action-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <h5>View Schedules</h5>
+                            <p>Check bus timetables and routes</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <a href="report.html" class="text-decoration-none">
+                        <div class="action-card">
+                            <div class="action-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <h5>Report Issue</h5>
+                            <p>Submit feedback or report problems</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="row">
+                <div class="col-lg-8 mb-4">
+                    <div class="card border-0 shadow-lg h-100">
+                        <div class="card-header bg-white border-0 py-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-history me-2 text-primary"></i> Recent Bookings
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="recentBookings" class="list-group list-group-flush">
+                                <div class="text-center py-5 text-muted">
+                                    <i class="fas fa-inbox fs-1 mb-3 d-block"></i>
+                                    <p class="mb-0">No recent bookings yet</p>
+                                    <a href="booking.html" class="btn btn-primary btn-sm mt-3">
+                                        <i class="fas fa-plus me-2"></i> Make Your First Booking
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <div class="card border-0 shadow-lg h-100">
+                        <div class="card-header bg-white border-0 py-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-bell me-2 text-warning"></i> Announcements
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info border-0">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>Welcome!</strong> Book your seat early to avoid rush hours.
+                            </div>
+                            <div class="alert alert-warning border-0">
+                                <i class="fas fa-clock me-2"></i>
+                                <strong>Peak Hours:</strong> 7-9 AM and 5-7 PM
+                            </div>
+                            <div class="alert alert-success border-0">
+                                <i class="fas fa-check-circle me-2"></i>
+                                <strong>New Route:</strong> Campus ↔ Town Center now available
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <h5 class="mb-3">
+                        <i class="fas fa-bus-alt me-2"></i> Campus Connect
+                    </h5>
+                    <p class="text-light opacity-75 mb-2">
+                        Mbarara University of Science and Technology<br>
+                        Smart Transportation Management System
+                    </p>
+                    <p class="text-light opacity-50 small mb-0">
+                        <i class="fas fa-copyright me-1"></i> 2024 MUST. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <h6 class="mb-3">Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="dashboard.html" class="text-light text-decoration-none opacity-75">
+                                <i class="fas fa-chevron-right me-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="booking.html" class="text-light text-decoration-none opacity-75">
+                                <i class="fas fa-chevron-right me-2"></i> Book Seat
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="schedule.html" class="text-light text-decoration-none opacity-75">
+                                <i class="fas fa-chevron-right me-2"></i> Schedules
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="mb-3">Support</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="contact.html" class="text-light text-decoration-none opacity-75">
+                                <i class="fas fa-chevron-right me-2"></i> Contact Us
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="report.html" class="text-light text-decoration-none opacity-75">
+                                <i class="fas fa-chevron-right me-2"></i> Report Issue
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="admin.html" class="text-light text-decoration-none opacity-75">
+                                <i class="fas fa-chevron-right me-2"></i> Admin Portal
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="border-light opacity-25 my-4">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <small class="text-light opacity-50">
+                        Developed by MUST Computer Science Students
+                    </small>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="text-light opacity-75 me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-light opacity-75 me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-light opacity-75"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+    
+    <!-- Dashboard Specific Script -->
+    <script>
+        // Load user info on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const userStr = localStorage.getItem('campusConnectUser');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    document.getElementById('welcomeUsername').textContent = user.name || user.username;
+                    document.getElementById('navUsername').textContent = user.username;
+                } catch (e) {
+                    console.error('Error loading user data:', e);
+                }
+            }
+            
+            // Load dashboard stats
+            loadDashboardStats();
+        });
+        
+        // Load dashboard statistics
+        async function loadDashboardStats() {
+            try {
+                // In a real application, fetch from backend
+                // For now, update with sample data
+                document.getElementById('activeBusesCount').textContent = '5';
+                document.getElementById('activeRoutesCount').textContent = '4';
+                document.getElementById('nextBusTime').textContent = '15 min';
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+    </script>
+</body>
+</html>

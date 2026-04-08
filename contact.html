@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Campus Connect</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+</head>
+<body class="dashboard-page">
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-lg">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <i class="fas fa-bus-alt me-2 fs-4"></i>
+                <span class="fw-bold">Campus Connect</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="fas fa-home me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="contact.html">
+                            <i class="fas fa-envelope me-1"></i> Contact
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-headset me-2"></i> Contact & Support</h1>
+            <p class="mb-0">We're here to help with your transportation needs</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-5">
+        <div class="container">
+            
+            <!-- Contact Cards -->
+            <div class="row mb-5">
+                <div class="col-md-4 mb-4">
+                    <div class="card border-0 shadow-lg h-100 text-center">
+                        <div class="card-body p-4">
+                            <div class="mb-3">
+                                <div class="d-inline-flex align-items-center justify-content-center" 
+                                     style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                    <i class="fas fa-phone-alt text-white fs-3"></i>
+                                </div>
+                            </div>
+                            <h5 class="mb-3">Call Us</h5>
+                            <p class="text-muted mb-3">Available Monday - Friday<br>8:00 AM - 6:00 PM</p>
+                            <a href="tel:+256700000000" class="btn btn-primary">
+                                <i class="fas fa-phone me-2"></i> +256 700 000 000
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card border-0 shadow-lg h-100 text-center">
+                        <div class="card-body p-4">
+                            <div class="mb-3">
+                                <div class="d-inline-flex align-items-center justify-content-center" 
+                                     style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                    <i class="fas fa-envelope text-white fs-3"></i>
+                                </div>
+                            </div>
+                            <h5 class="mb-3">Email Us</h5>
+                            <p class="text-muted mb-3">Response within 24 hours</p>
+                            <a href="mailto:transport@must.ac.ug" class="btn btn-primary">
+                                <i class="fas fa-envelope me-2"></i> transport@must.ac.ug
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card border-0 shadow-lg h-100 text-center">
+                        <div class="card-body p-4">
+                            <div class="mb-3">
+                                <div class="d-inline-flex align-items-center justify-content-center" 
+                                     style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                                    <i class="fas fa-map-marker-alt text-white fs-3"></i>
+                                </div>
+                            </div>
+                            <h5 class="mb-3">Visit Us</h5>
+                            <p class="text-muted mb-3">Transport Office<br>Administration Block</p>
+                            <a href="#map" class="btn btn-primary">
+                                <i class="fas fa-directions me-2"></i> Get Directions
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="row mb-5">
+                <div class="col-12 mb-4">
+                    <h2 class="text-gradient">
+                        <i class="fas fa-question-circle me-2"></i> Frequently Asked Questions
+                    </h2>
+                </div>
+                <div class="col-lg-8">
+                    <div class="accordion" id="faqAccordion">
+                        
+                        <!-- FAQ 1 -->
+                        <div class="accordion-item border-0 shadow-sm mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                    <i class="fas fa-ticket-alt me-2 text-primary"></i> How do I book a seat?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Simply log in, navigate to the "Book Seat" page, select your route, date, time, and preferred seat. Your booking will be confirmed instantly!
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 2 -->
+                        <div class="accordion-item border-0 shadow-sm mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                    <i class="fas fa-times-circle me-2 text-danger"></i> Can I cancel my booking?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes! You can cancel your booking up to 1 hour before the scheduled departure time through your dashboard.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 3 -->
+                        <div class="accordion-item border-0 shadow-sm mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                    <i class="fas fa-clock me-2 text-warning"></i> What are the operating hours?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Buses operate from 6:00 AM to 7:00 PM, Monday through Friday. Weekend schedules may vary. Check the Schedules page for detailed timetables.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 4 -->
+                        <div class="accordion-item border-0 shadow-sm mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                    <i class="fas fa-map-marked-alt me-2 text-success"></i> How can I track buses in real-time?
+                                </button>
+                            </h2>
+                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Use the live map on the Dashboard to see real-time bus locations. Red markers show active buses, and you can click on them for details.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 5 -->
+                        <div class="accordion-item border-0 shadow-sm mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                    <i class="fas fa-money-bill-wave me-2 text-info"></i> Is there a fee for the service?
+                                </button>
+                            </h2>
+                            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    No! Campus Connect is a free transportation service provided by Mbarara University for all students.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 6 -->
+                        <div class="accordion-item border-0 shadow-sm mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                                    <i class="fas fa-mobile-alt me-2 text-purple"></i> Can I use this on my phone?
+                                </button>
+                            </h2>
+                            <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes! Campus Connect is fully responsive and works on all devices. You can even install it as an app on your phone for quick access.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Quick Help -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-lg mb-4">
+                        <div class="card-header bg-primary text-white py-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-life-ring me-2"></i> Need Immediate Help?
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-3">Choose the best option for your situation:</p>
+                            <div class="d-grid gap-2">
+                                <a href="report.html" class="btn btn-outline-danger">
+                                    <i class="fas fa-flag me-2"></i> Report an Issue
+                                </a>
+                                <a href="dashboard.html" class="btn btn-outline-primary">
+                                    <i class="fas fa-home me-2"></i> Go to Dashboard
+                                </a>
+                                <a href="booking.html" class="btn btn-outline-success">
+                                    <i class="fas fa-ticket-alt me-2"></i> Book a Seat
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-header bg-warning bg-opacity-10 py-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-lightbulb me-2 text-warning"></i> Pro Tips
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="small ps-3 mb-0">
+                                <li class="mb-2">Book early during peak hours (7-9 AM)</li>
+                                <li class="mb-2">Arrive 10 minutes before departure</li>
+                                <li class="mb-2">Check the live map for bus locations</li>
+                                <li class="mb-0">Enable notifications for updates</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <h5 class="mb-3">
+                        <i class="fas fa-bus-alt me-2"></i> Campus Connect
+                    </h5>
+                    <p class="text-light opacity-75 mb-2">
+                        Mbarara University of Science and Technology<br>
+                        Smart Transportation Management System
+                    </p>
+                    <p class="text-light opacity-50 small mb-0">
+                        <i class="fas fa-copyright me-1"></i> 2024 MUST. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <h6 class="mb-3">Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="index.html" class="text-light text-decoration-none opacity-75">
+                                <i class="fas fa-chevron-right me-2"></i> Home
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="dashboard.html" class="text-light text-decoration-none opacity-75">
+                                <i class="fas fa-chevron-right me-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="schedule.html" class="text-light text-decoration-none opacity-75">
+                                <i class="fas fa-chevron-right me-2"></i> Schedules
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="mb-3">Connect With Us</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light fs-5"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-light fs-5"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-light fs-5"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-light fs-5"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-light opacity-25 my-4">
+            <div class="text-center">
+                <small class="text-light opacity-50">
+                    Developed by MUST Computer Science Students | Version 2.0
+                </small>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

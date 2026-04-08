@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Seat - Campus Connect</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+</head>
+<body class="dashboard-page">
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-lg sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="dashboard.html">
+                <i class="fas fa-bus-alt me-2 fs-4"></i>
+                <span class="fw-bold">Campus Connect</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="fas fa-home me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="booking.html">
+                            <i class="fas fa-ticket-alt me-1"></i> Book Seat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="schedule.html">
+                            <i class="fas fa-clock me-1"></i> Schedules
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="report.html">
+                            <i class="fas fa-exclamation-triangle me-1"></i> Report Issue
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">
+                            <i class="fas fa-envelope me-1"></i> Contact
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" 
+                           data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> <span id="navUsername">Profile</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> My Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-history me-2"></i> My Bookings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-ticket-alt me-2"></i> Book Your Seat</h1>
+            <p class="mb-0">Choose your route, date, and seat to reserve</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-5">
+        <div class="container">
+            
+            <div class="row">
+                <!-- Booking Form -->
+                <div class="col-lg-8 mb-4">
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-header bg-gradient text-white py-3"
+                             style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <h4 class="mb-0">
+                                <i class="fas fa-clipboard-list me-2"></i> Booking Details
+                            </h4>
+                        </div>
+                        <div class="card-body p-4">
+                            
+                            <!-- Alert Messages -->
+                            <div id="bookingAlert" class="alert alert-dismissible fade d-none" role="alert">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <span id="bookingAlertMessage"></span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                            
+                            <!-- Booking Form -->
+                            <form id="bookingForm" onsubmit="handleBooking(event)" novalidate>
+                                
+                                <!-- Route Selection -->
+                                <div class="mb-4">
+                                    <label for="route" class="form-label">
+                                        <i class="fas fa-route me-1"></i> Select Route
+                                    </label>
+                                    <select class="form-select form-select-lg" id="route" name="route" required onchange="loadAvailableBuses()">
+                                        <option value="">Choose a route...</option>
+                                        <option value="campus-town">Campus → Town Center</option>
+                                        <option value="town-campus">Town Center → Campus</option>
+                                        <option value="campus-hostels">Campus → Hostels</option>
+                                        <option value="hostels-campus">Hostels → Campus</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select a route</div>
+                                </div>
+
+                                <!-- Date & Time Selection -->
+                                <div class="row mb-4">
+                                    <div class="col-md-6 mb-3 mb-md-0">
+                                        <label for="date" class="form-label">
+                                            <i class="fas fa-calendar me-1"></i> Date
+                                        </label>
+                                        <input type="date" class="form-control form-control-lg" id="date" 
+                                               name="date" required onchange="loadAvailableBuses()">
+                                        <div class="invalid-feedback">Please select a date</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="time" class="form-label">
+                                            <i class="fas fa-clock me-1"></i> Time
+                                        </label>
+                                        <select class="form-select form-select-lg" id="time" name="time" required onchange="loadAvailableBuses()">
+                                            <option value="">Select time...</option>
+                                            <option value="06:00:00">6:00 AM</option>
+                                            <option value="07:00:00">7:00 AM</option>
+                                            <option value="08:00:00">8:00 AM</option>
+                                            <option value="09:00:00">9:00 AM</option>
+                                            <option value="12:00:00">12:00 PM</option>
+                                            <option value="13:00:00">1:00 PM</option>
+                                            <option value="14:00:00">2:00 PM</option>
+                                            <option value="15:00:00">3:00 PM</option>
+                                            <option value="16:00:00">4:00 PM</option>
+                                            <option value="17:00:00">5:00 PM</option>
+                                            <option value="18:00:00">6:00 PM</option>
+                                        </select>
+                                        <div class="invalid-feedback">Please select a time</div>
+                                    </div>
+                                </div>
+
+                                <!-- Bus Selection -->
+                                <div class="mb-4">
+                                    <label for="bus" class="form-label">
+                                        <i class="fas fa-bus me-1"></i> Select Bus
+                                    </label>
+                                    <select class="form-select form-select-lg" id="bus" name="bus" required onchange="loadSeatMap()">
+                                        <option value="">First select route, date and time...</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select a bus</div>
+                                    <div id="busInfo" class="mt-2"></div>
+                                </div>
+
+                                <!-- Pickup Point -->
+                                <div class="mb-4">
+                                    <label for="pickup" class="form-label">
+                                        <i class="fas fa-map-marker-alt me-1"></i> Pickup Point
+                                    </label>
+                                    <select class="form-select form-select-lg" id="pickup" name="pickup" required>
+                                        <option value="">Choose pickup point...</option>
+                                        <option value="Main Gate">Main Gate</option>
+                                        <option value="Library Stop">Library Stop</option>
+                                        <option value="Hostel Area">Hostel Area</option>
+                                        <option value="Administration Block">Administration Block</option>
+                                        <option value="Town Center">Town Center</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select a pickup point</div>
+                                </div>
+
+                                <!-- Seat Selection -->
+                                <div class="mb-4">
+                                    <label class="form-label d-block">
+                                        <i class="fas fa-chair me-1"></i> Select Your Seat
+                                    </label>
+                                    
+                                    <!-- Seat Legend -->
+                                    <div class="row mb-3">
+                                        <div class="col-4">
+                                            <small class="text-success">
+                                                <i class="fas fa-square me-1"></i> Available
+                                            </small>
+                                        </div>
+                                        <div class="col-4">
+                                            <small class="text-danger">
+                                                <i class="fas fa-square me-1"></i> Occupied
+                                            </small>
+                                        </div>
+                                        <div class="col-4">
+                                            <small class="text-primary">
+                                                <i class="fas fa-square me-1"></i> Selected
+                                            </small>
+                                        </div>
+                                    </div>
+
+                                    <!-- Seat Map -->
+                                    <div id="seatMapContainer" class="text-center">
+                                        <div class="alert alert-info border-0">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            Select bus to view available seats
+                                        </div>
+                                    </div>
+                                    
+                                    <input type="hidden" id="seat" name="seat" required>
+                                    <div class="invalid-feedback d-block" id="seatError" style="display: none!important;">
+                                        Please select a seat
+                                    </div>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-check-circle me-2"></i> Confirm Booking
+                                        <span class="spinner-border spinner-border-sm ms-2 d-none" id="bookingSpinner"></span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Summary -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card border-0 shadow-lg sticky-top" style="top: 80px;">
+                        <div class="card-header bg-light py-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-receipt me-2 text-primary"></i> Booking Summary
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <small class="text-muted d-block mb-1">Route</small>
+                                <strong id="summaryRoute">-</strong>
+                            </div>
+                            <div class="mb-3">
+                                <small class="text-muted d-block mb-1">Date & Time</small>
+                                <strong id="summaryDateTime">-</strong>
+                            </div>
+                            <div class="mb-3">
+                                <small class="text-muted d-block mb-1">Bus Number</small>
+                                <strong id="summaryBus">-</strong>
+                            </div>
+                            <div class="mb-3">
+                                <small class="text-muted d-block mb-1">Pickup Point</small>
+                                <strong id="summaryPickup">-</strong>
+                            </div>
+                            <div class="mb-3">
+                                <small class="text-muted d-block mb-1">Seat Number</small>
+                                <strong id="summarySeat" class="text-primary">Not selected</strong>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <strong>Total Cost:</strong>
+                                <strong class="text-success">FREE</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Tips -->
+                    <div class="card border-0 shadow-lg mt-4">
+                        <div class="card-header bg-warning bg-opacity-10 py-3">
+                            <h6 class="mb-0">
+                                <i class="fas fa-lightbulb me-2 text-warning"></i> Quick Tips
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="small mb-0 ps-3">
+                                <li class="mb-2">Book at least 30 minutes before departure</li>
+                                <li class="mb-2">Arrive at pickup point 10 minutes early</li>
+                                <li class="mb-2">Keep your booking confirmation handy</li>
+                                <li class="mb-0">You can cancel up to 1 hour before departure</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="mb-0">
+                        <i class="fas fa-copyright me-1"></i> 2024 Campus Connect - Mbarara University
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <small class="text-light opacity-50">
+                        Developed by MUST Computer Science Students
+                    </small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+    
+    <!-- Booking Specific Script -->
+    <script>
+        let selectedSeat = null;
+        let availableSeats = [];
+
+        // Load user info
+        document.addEventListener('DOMContentLoaded', () => {
+            const userStr = localStorage.getItem('campusConnectUser');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    document.getElementById('navUsername').textContent = user.username;
+                } catch (e) {
+                    console.error('Error loading user data:', e);
+                }
+            }
+
+            // Set min date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').setAttribute('min', today);
+            document.getElementById('date').value = today;
+
+            // Update summary on form changes
+            document.getElementById('route').addEventListener('change', updateSummary);
+            document.getElementById('date').addEventListener('change', updateSummary);
+            document.getElementById('time').addEventListener('change', updateSummary);
+            document.getElementById('bus').addEventListener('change', updateSummary);
+            document.getElementById('pickup').addEventListener('change', updateSummary);
+        });
+
+        // Load available buses
+        async function loadAvailableBuses() {
+            const route = document.getElementById('route').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+
+            if (!route || !date || !time) return;
+
+            const busSelect = document.getElementById('bus');
+            busSelect.innerHTML = '<option value="">Loading buses...</option>';
+
+            try {
+                const response = await fetch(`backend/buses.php?action=availability&route=${route}&date=${date}&time=${time}`);
+                const data = await response.json();
+
+                if (data.success && data.buses) {
+                    busSelect.innerHTML = '<option value="">Select a bus...</option>';
+                    data.buses.forEach(bus => {
+                        const option = document.createElement('option');
+                        option.value = bus.bus_number;
+                        option.textContent = `Bus ${bus.bus_number} (${bus.available_seats}/${bus.capacity} available)`;
+                        option.dataset.capacity = bus.capacity;
+                        option.dataset.available = bus.available_seats;
+                        busSelect.appendChild(option);
+                    });
+                } else {
+                    busSelect.innerHTML = '<option value="">No buses available</option>';
+                }
+            } catch (error) {
+                console.error('Error loading buses:', error);
+                // Fallback to sample data
+                busSelect.innerHTML = `
+                    <option value="">Select a bus...</option>
+                    <option value="001" data-capacity="40" data-available="35">Bus 001 (35/40 available)</option>
+                    <option value="002" data-capacity="40" data-available="38">Bus 002 (38/40 available)</option>
+                    <option value="003" data-capacity="40" data-available="32">Bus 003 (32/40 available)</option>
+                `;
+            }
+        }
+
+        // Load seat map
+        async function loadSeatMap() {
+            const bus = document.getElementById('bus').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+
+            if (!bus || !date || !time) return;
+
+            const container = document.getElementById('seatMapContainer');
+            container.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"></div></div>';
+
+            try {
+                // In production, fetch from backend
+                // For now, generate sample seat map
+                setTimeout(() => {
+                    generateSeatMap(40, [2, 5, 8, 12, 15, 23]); // 40 seats, some occupied
+                }, 500);
+            } catch (error) {
+                console.error('Error loading seat map:', error);
+                container.innerHTML = '<div class="alert alert-danger">Error loading seats</div>';
+            }
+        }
+
+        // Generate seat map
+        function generateSeatMap(totalSeats, occupiedSeats = []) {
+            const container = document.getElementById('seatMapContainer');
+            const seatMap = document.createElement('div');
+            seatMap.className = 'seat-map';
+
+            for (let i = 1; i <= totalSeats; i++) {
+                const seat = document.createElement('div');
+                seat.className = 'seat';
+                seat.textContent = i;
+
+                if (occupiedSeats.includes(i)) {
+                    seat.classList.add('occupied');
+                    seat.title = 'Seat occupied';
+                } else {
+                    seat.classList.add('available');
+                    seat.title = 'Click to select';
+                    seat.onclick = () => selectSeat(i, seat);
+                }
+
+                seatMap.appendChild(seat);
+            }
+
+            container.innerHTML = '';
+            container.appendChild(seatMap);
+        }
+
+        // Select seat
+        function selectSeat(seatNumber, seatElement) {
+            // Deselect previous seat
+            const previousSelected = document.querySelector('.seat.selected');
+            if (previousSelected) {
+                previousSelected.classList.remove('selected');
+                previousSelected.classList.add('available');
+            }
+
+            // Select new seat
+            seatElement.classList.remove('available');
+            seatElement.classList.add('selected');
+            selectedSeat = seatNumber;
+
+            // Update hidden input and summary
+            document.getElementById('seat').value = seatNumber;
+            document.getElementById('summarySeat').textContent = `Seat ${seatNumber}`;
+            document.getElementById('summarySeat').classList.add('text-primary');
+        }
+
+        // Update summary
+        function updateSummary() {
+            const route = document.getElementById('route');
+            const date = document.getElementById('date');
+            const time = document.getElementById('time');
+            const bus = document.getElementById('bus');
+            const pickup = document.getElementById('pickup');
+
+            if (route.value) {
+                document.getElementById('summaryRoute').textContent = route.options[route.selectedIndex].text;
+            }
+
+            if (date.value && time.value) {
+                const dateObj = new Date(date.value);
+                const timeStr = time.options[time.selectedIndex].text;
+                document.getElementById('summaryDateTime').textContent = 
+                    `${dateObj.toLocaleDateString()} at ${timeStr}`;
+            }
+
+            if (bus.value) {
+                document.getElementById('summaryBus').textContent = `Bus ${bus.value}`;
+            }
+
+            if (pickup.value) {
+                document.getElementById('summaryPickup').textContent = pickup.value;
+            }
+        }
+
+        // Handle booking submission
+        async function handleBooking(event) {
+            event.preventDefault();
+
+            const form = event.target;
+
+            // Validate seat selection
+            if (!selectedSeat) {
+                showAlert('bookingAlert', 'Please select a seat', 'danger');
+                return;
+            }
+
+            // Validate form
+            if (!form.checkValidity()) {
+                event.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+
+            // Show loading
+            const spinner = document.getElementById('bookingSpinner');
+            spinner.classList.remove('d-none');
+            form.querySelector('button[type="submit"]').disabled = true;
+
+            try {
+                const formData = new FormData(form);
+                
+                // Add user ID from localStorage
+                const userStr = localStorage.getItem('campusConnectUser');
+                if (userStr) {
+                    const user = JSON.parse(userStr);
+                    formData.append('user_id', user.id);
+                }
+
+                const response = await fetch('backend/booking.php?action=create', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('bookingAlert', 'Booking confirmed successfully!', 'success');
+                    
+                    // Reset form after 2 seconds
+                    setTimeout(() => {
+                        form.reset();
+                        form.classList.remove('was-validated');
+                        selectedSeat = null;
+                        document.getElementById('seatMapContainer').innerHTML = 
+                            '<div class="alert alert-info border-0"><i class="fas fa-info-circle me-2"></i>Select bus to view available seats</div>';
+                        
+                        // Redirect to dashboard
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                } else {
+                    showAlert('bookingAlert', data.message || 'Booking failed. Please try again.', 'danger');
+                }
+            } catch (error) {
+                console.error('Booking error:', error);
+                showAlert('bookingAlert', 'An error occurred. Please try again.', 'danger');
+            } finally {
+                spinner.classList.add('d-none');
+                form.querySelector('button[type="submit"]').disabled = false;
+            }
+        }
+
+        // Show alert helper
+        function showAlert(alertId, message, type) {
+            const alert = document.getElementById(alertId);
+            const messageSpan = document.getElementById(alertId + 'Message');
+            
+            alert.classList.remove('alert-success', 'alert-danger', 'alert-warning', 'alert-info');
+            alert.classList.add(`alert-${type}`, 'show');
+            alert.classList.remove('d-none');
+            messageSpan.textContent = message;
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => alert.classList.add('d-none'), 300);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

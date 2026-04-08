@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Campus Connect</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#dc3545">
+</head>
+<body class="dashboard-page">
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-lg sticky-top" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="admin.html">
+                <i class="fas fa-user-shield me-2 fs-4"></i>
+                <span class="fw-bold">Admin Panel</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="fas fa-home me-1"></i> Student View
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Login (Initially shown) -->
+    <section id="adminLoginSection" class="min-vh-100 d-flex align-items-center" 
+             style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body p-5">
+                            <div class="text-center mb-4">
+                                <div class="d-inline-flex align-items-center justify-content-center mb-3"
+                                     style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                                    <i class="fas fa-user-shield text-white fs-1"></i>
+                                </div>
+                                <h3 class="fw-bold">Admin Login</h3>
+                                <p class="text-muted">Access administrator dashboard</p>
+                            </div>
+
+                            <!-- Alert Messages -->
+                            <div id="adminLoginAlert" class="alert alert-dismissible fade d-none" role="alert">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <span id="adminLoginAlertMessage"></span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+
+                            <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" novalidate>
+                                <div class="mb-3">
+                                    <label for="adminUsername" class="form-label">
+                                        <i class="fas fa-user me-1"></i> Admin Username
+                                    </label>
+                                    <input type="text" class="form-control form-control-lg" id="adminUsername" 
+                                           name="username" required placeholder="Enter admin username">
+                                    <div class="invalid-feedback">Please enter your username</div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="adminPassword" class="form-label">
+                                        <i class="fas fa-lock me-1"></i> Password
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control form-control-lg" id="adminPassword" 
+                                               name="password" required placeholder="Enter password">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('adminPassword')">
+                                            <i class="fas fa-eye" id="adminPasswordToggle"></i>
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback">Please enter your password</div>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-danger btn-lg">
+                                        <i class="fas fa-sign-in-alt me-2"></i> Login as Admin
+                                        <span class="spinner-border spinner-border-sm ms-2 d-none" id="adminLoginSpinner"></span>
+                                    </button>
+                                </div>
+                            </form>
+
+                            <div class="text-center mt-4">
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle me-1"></i> 
+                                    Default: admin / admin123
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Dashboard (Initially hidden) -->
+    <section id="adminDashboardSection" class="py-5 d-none">
+        <div class="container-fluid">
+            
+            <!-- Page Header -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="mb-1">
+                                <i class="fas fa-tachometer-alt me-2 text-danger"></i> 
+                                Administrator Dashboard
+                            </h2>
+                            <p class="text-muted mb-0">Manage and monitor the entire transportation system</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-danger" onclick="refreshAdminData()">
+                                <i class="fas fa-sync-alt me-2"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row g-4 mb-5">
+                <div class="col-xl-3 col-md-6">
+                    <div class="stat-card primary">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-number" id="totalUsers">250</div>
+                        <div class="stat-label">Total Students</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="stat-card success">
+                        <div class="stat-icon">
+                            <i class="fas fa-bus"></i>
+                        </div>
+                        <div class="stat-number" id="totalBuses">5</div>
+                        <div class="stat-label">Active Buses</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="stat-card warning">
+                        <div class="stat-icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <div class="stat-number" id="todayBookings">42</div>
+                        <div class="stat-label">Today's Bookings</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="stat-card danger">
+                        <div class="stat-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-number" id="pendingReports">3</div>
+                        <div class="stat-label">Pending Reports</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Management Tabs -->
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-white py-3">
+                    <ul class="nav nav-pills card-header-pills" id="adminTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="buses-tab" data-bs-toggle="tab" data-bs-target="#buses" type="button">
+                                <i class="fas fa-bus me-2"></i> Manage Buses
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="drivers-tab" data-bs-toggle="tab" data-bs-target="#drivers" type="button">
+                                <i class="fas fa-user-tie me-2"></i> Manage Drivers
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="bookings-tab" data-bs-toggle="tab" data-bs-target="#bookings" type="button">
+                                <i class="fas fa-calendar-check me-2"></i> View Bookings
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="reports-tab" data-bs-toggle="tab" data-bs-target="#reports" type="button">
+                                <i class="fas fa-flag me-2"></i> View Reports
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body p-4">
+                    <div class="tab-content" id="adminTabsContent">
+                        
+                        <!-- Buses Tab -->
+                        <div class="tab-pane fade show active" id="buses" role="tabpanel">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4><i class="fas fa-bus me-2 text-primary"></i> Bus Management</h4>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBusModal">
+                                    <i class="fas fa-plus me-2"></i> Add New Bus
+                                </button>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Bus Number</th>
+                                            <th>Route</th>
+                                            <th>Capacity</th>
+                                            <th>Driver</th>
+                                            <th>Status</th>
+                                            <th>Location</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="busesTableBody">
+                                        <tr>
+                                            <td><strong>Bus 001</strong></td>
+                                            <td>Campus → Town</td>
+                                            <td>40 seats</td>
+                                            <td>John Mwesigwa</td>
+                                            <td><span class="status-badge on-time">Active</span></td>
+                                            <td><i class="fas fa-map-marker-alt text-success me-1"></i> In Transit</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary me-1" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Bus 002</strong></td>
+                                            <td>Town → Campus</td>
+                                            <td>40 seats</td>
+                                            <td>Peter Okello</td>
+                                            <td><span class="status-badge on-time">Active</span></td>
+                                            <td><i class="fas fa-map-marker-alt text-success me-1"></i> In Transit</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary me-1" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Bus 003</strong></td>
+                                            <td>Campus → Hostels</td>
+                                            <td>40 seats</td>
+                                            <td>Mary Nakato</td>
+                                            <td><span class="status-badge cancelled">Maintenance</span></td>
+                                            <td><i class="fas fa-tools text-warning me-1"></i> Workshop</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary me-1" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Drivers Tab -->
+                        <div class="tab-pane fade" id="drivers" role="tabpanel">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4><i class="fas fa-user-tie me-2 text-success"></i> Driver Management</h4>
+                                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDriverModal">
+                                    <i class="fas fa-plus me-2"></i> Add New Driver
+                                </button>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>License Number</th>
+                                            <th>Phone</th>
+                                            <th>Assigned Bus</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="driversTableBody">
+                                        <tr>
+                                            <td><strong>John Mwesigwa</strong></td>
+                                            <td>DL001234</td>
+                                            <td>+256 700 123 456</td>
+                                            <td>Bus 001</td>
+                                            <td><span class="status-badge on-time">Active</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary me-1" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" title="Remove">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Peter Okello</strong></td>
+                                            <td>DL002345</td>
+                                            <td>+256 700 234 567</td>
+                                            <td>Bus 002</td>
+                                            <td><span class="status-badge on-time">Active</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary me-1" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" title="Remove">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Mary Nakato</strong></td>
+                                            <td>DL003456</td>
+                                            <td>+256 700 345 678</td>
+                                            <td>Bus 003</td>
+                                            <td><span class="status-badge pending">Off Duty</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary me-1" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" title="Remove">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Bookings Tab -->
+                        <div class="tab-pane fade" id="bookings" role="tabpanel">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4><i class="fas fa-calendar-check me-2 text-warning"></i> Today's Bookings</h4>
+                                <button class="btn btn-outline-primary" onclick="exportBookings()">
+                                    <i class="fas fa-download me-2"></i> Export
+                                </button>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Booking ID</th>
+                                            <th>Student</th>
+                                            <th>Bus</th>
+                                            <th>Route</th>
+                                            <th>Time</th>
+                                            <th>Seat</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bookingsTableBody">
+                                        <tr>
+                                            <td><small>BC1728735234567</small></td>
+                                            <td>John Mwesigwa</td>
+                                            <td>Bus 001</td>
+                                            <td>Campus → Town</td>
+                                            <td>7:00 AM</td>
+                                            <td><strong>12</strong></td>
+                                            <td><span class="status-badge confirmed">Confirmed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><small>BC1728735234568</small></td>
+                                            <td>Sarah Nakato</td>
+                                            <td>Bus 001</td>
+                                            <td>Campus → Town</td>
+                                            <td>7:00 AM</td>
+                                            <td><strong>15</strong></td>
+                                            <td><span class="status-badge confirmed">Confirmed</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Reports Tab -->
+                        <div class="tab-pane fade" id="reports" role="tabpanel">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4><i class="fas fa-flag me-2 text-danger"></i> Student Reports</h4>
+                                <div>
+                                    <select class="form-select d-inline-block w-auto me-2">
+                                        <option value="all">All Reports</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="resolved">Resolved</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Report ID</th>
+                                            <th>Type</th>
+                                            <th>Priority</th>
+                                            <th>Route</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="reportsTableBody">
+                                        <tr>
+                                            <td><small>RPT1728735234569</small></td>
+                                            <td>Delay</td>
+                                            <td><span class="badge bg-danger">High</span></td>
+                                            <td>Campus → Town</td>
+                                            <td>Today</td>
+                                            <td><span class="status-badge pending">Pending</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-success" title="Resolve">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-primary" title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><small>RPT1728735234570</small></td>
+                                            <td>Overcrowding</td>
+                                            <td><span class="badge bg-warning">Medium</span></td>
+                                            <td>Town → Campus</td>
+                                            <td>Yesterday</td>
+                                            <td><span class="status-badge confirmed">Resolved</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-success" title="Resolve">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-primary" title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Add Bus Modal -->
+    <div class="modal fade" id="addBusModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-bus me-2"></i> Add New Bus
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addBusForm">
+                        <div class="mb-3">
+                            <label for="busNumber" class="form-label">Bus Number</label>
+                            <input type="text" class="form-control" id="busNumber" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="busCapacity" class="form-label">Capacity</label>
+                            <input type="number" class="form-control" id="busCapacity" value="40" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="busRoute" class="form-label">Route</label>
+                            <select class="form-select" id="busRoute" required>
+                                <option value="">Select route...</option>
+                                <option value="campus-town">Campus → Town Center</option>
+                                <option value="town-campus">Town Center → Campus</option>
+                                <option value="campus-hostels">Campus → Hostels</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i> Save Bus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Driver Modal -->
+    <div class="modal fade" id="addDriverModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-user-tie me-2"></i> Add New Driver
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addDriverForm">
+                        <div class="mb-3">
+                            <label for="driverName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="driverName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="driverLicense" class="form-label">License Number</label>
+                            <input type="text" class="form-control" id="driverLicense" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="driverPhone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="driverPhone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="assignedBus" class="form-label">Assigned Bus</label>
+                            <select class="form-select" id="assignedBus">
+                                <option value="">No assignment</option>
+                                <option value="001">Bus 001</option>
+                                <option value="002">Bus 002</option>
+                                <option value="003">Bus 003</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success">
+                        <i class="fas fa-save me-2"></i> Save Driver
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="mb-0">
+                        <i class="fas fa-copyright me-1"></i> 2024 Campus Connect - Administrator Panel
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <small class="text-light opacity-50">
+                        Mbarara University of Science and Technology
+                    </small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+    
+    <!-- Admin Specific Script -->
+    <script>
+        // Handle admin login
+        async function handleAdminLogin(event) {
+            event.preventDefault();
+
+            const form = event.target;
+
+            if (!form.checkValidity()) {
+                event.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+
+            const spinner = document.getElementById('adminLoginSpinner');
+            spinner.classList.remove('d-none');
+            form.querySelector('button[type="submit"]').disabled = true;
+
+            try {
+                const formData = new FormData(form);
+                const response = await fetch('backend/admin.php?action=login', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAdminAlert('Login successful!', 'success');
+                    
+                    // Hide login, show dashboard
+                    setTimeout(() => {
+                        document.getElementById('adminLoginSection').classList.add('d-none');
+                        document.getElementById('adminDashboardSection').classList.remove('d-none');
+                    }, 1000);
+                } else {
+                    showAdminAlert(data.message || 'Invalid credentials', 'danger');
+                }
+            } catch (error) {
+                console.error('Admin login error:', error);
+                showAdminAlert('An error occurred. Please try again.', 'danger');
+            } finally {
+                spinner.classList.add('d-none');
+                form.querySelector('button[type="submit"]').disabled = false;
+            }
+        }
+
+        // Show alert helper
+        function showAdminAlert(message, type) {
+            const alert = document.getElementById('adminLoginAlert');
+            const messageSpan = document.getElementById('adminLoginAlertMessage');
+
+            alert.classList.remove('alert-success', 'alert-danger', 'alert-warning', 'alert-info');
+            alert.classList.add(`alert-${type}`, 'show');
+            alert.classList.remove('d-none');
+            messageSpan.textContent = message;
+
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => alert.classList.add('d-none'), 300);
+            }, 5000);
+        }
+
+        // Refresh admin data
+        function refreshAdminData() {
+            showBootstrapToast('Refreshing admin data...', 'info');
+            // In production, fetch from backend
+            setTimeout(() => {
+                showBootstrapToast('Data refreshed!', 'success');
+            }, 1000);
+        }
+
+        // Export bookings
+        function exportBookings() {
+            showBootstrapToast('Exporting bookings...', 'info');
+            // In production, generate and download CSV/PDF
+        }
+    </script>
+</body>
+</html>
