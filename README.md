@@ -1,15 +1,15 @@
-#  Campus Connect - University Transportation Management System
+#  Coud Route -  Transportation Management System
 
 <div align="center">
 
-![Campus Connect](https://img.shields.io/badge/Campus-Connect-blue?style=for-the-badge)
+![Cloud Route](https://img.shields.io/badge/Campus-Connect-blue?style=for-the-badge)
 ![Version](https://img.shields.io/badge/version-2.0-green?style=for-the-badge)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple?style=for-the-badge)
 ![PHP](https://img.shields.io/badge/PHP-OOP-blue?style=for-the-badge)
 
 **A modern, professional web application for managing university bus transportation**
 
-Built for **Mbarara University of Science and Technology (MUST)**
+Built by  **Group10 BCS CloudComputing**
 
 [Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Tech Stack](#-tech-stack) • [Documentation](#-documentation)
 
@@ -36,7 +36,7 @@ Built for **Mbarara University of Science and Technology (MUST)**
 
 ##  Overview
 
-**Campus Connect** is a comprehensive transportation management system designed specifically for university students. It provides:
+**Cloud Route** is a comprehensive transportation management system designed specifically for university students. It provides:
 
  **Real-time bus tracking** with interactive maps  
  **Online seat booking** with seat selection  
