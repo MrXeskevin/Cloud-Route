@@ -1,10 +1,10 @@
-<<<<<<< HEAD
+
 # Cloud Route - Intelligent Transportation System
 
 <div align="center">
 
 ![Cloud Route](https://img.shields.io/badge/Cloud-Route-blue?style=for-the-badge)
-=======
+
 #  Coud Route -  Transportation Management System
 
 <div align="center">
@@ -19,7 +19,7 @@
 
 <<<<<<< HEAD
 Built for **modern transit organizations**
-=======
+
 Built by  **Group10 BCS CloudComputing**
 >>>>>>> 704b0f5495e41cfba1633be8bb8c53e201989672
 
@@ -48,9 +48,9 @@ Built by  **Group10 BCS CloudComputing**
 
 ##  Overview
 
-<<<<<<< HEAD
+
 **Cloud Route** is a professional, feature-rich web-based transportation management system designed to optimize routes, manage bookings, and provide real-time tracking for modern transit organizations. It provides:
-=======
+
 **Cloud Route** is a comprehensive transportation management system designed specifically for university students. It provides:
 >>>>>>> 704b0f5495e41cfba1633be8bb8c53e201989672
 
@@ -65,7 +65,7 @@ Built by  **Group10 BCS CloudComputing**
 
 ## Features
 
-### 🚀 Features
+###  Features
 - **Live Route Tracking**: Monitor vehicles in real-time on interactive maps.
 - **Instant Booking**: Secure seats and manage reservations effortlessly.
 - **Smart Scheduling**: View up-to-date arrival and departure times.
