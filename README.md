@@ -248,7 +248,7 @@ CloudRoute/
 
 ---
 
-## 🔒 Security Features
+##  Security Features
 
 ### 1. Password Security
 - **Bcrypt hashing** using `password_hash()`
@@ -263,32 +263,31 @@ CloudRoute/
 
 ---
 
-## 👥 Credits
+##  Credits
 
-**Developed by**: Cloud Route Engineering Team  
+**Developed by**: Cloud Route-GROUP 10 BCS(2024) 
 **Project Type**: Intelligent Transportation Management System  
-**Year**: 2024  
+**Year**: 2026 
 **Version**: 2.0 (Professional Redesign)
 
 ---
 
-## 📄 License
+##  License
 
 This software is provided for professional transportation management use.
 
 ---
 
-## 📞 Support
+##  Support
 
 For issues, questions, or suggestions:
-- **Email**: support@cloudroute.example.com
-- **Website**: www.cloudroute.example.com
-
+- **Email**: kevinmugenyi57@gmail.com
+- **Website**: ...yet to be hosted
 ---
 
 <div align="center">
 
-**Made with ❤️ for better transit**
+**Made with  for better transit**
 
 [⬆ Back to Top](#cloud-route---intelligent-transportation-system)
 
