@@ -13,7 +13,7 @@ class Database {
     private $host = 'localhost';
     private $username = 'root';
     private $password = '';
-    private $database = 'campus_connect';
+    private $database = 'cloud_route';
     private $connection;
     
     /**

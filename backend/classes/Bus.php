@@ -321,7 +321,7 @@ class Bus {
             while ($row = $result->fetch_assoc()) {
                 // Simulate location if no GPS data (for development/testing)
                 if (empty($row['current_lat']) || empty($row['current_lng'])) {
-                    // Mbarara University coordinates with random offset
+                    // Regional headquarters coordinates with random offset
                     $row['current_lat'] = -0.6019 + (rand(-100, 100) / 10000);
                     $row['current_lng'] = 30.6574 + (rand(-100, 100) / 10000);
                 }

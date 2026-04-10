@@ -1,5 +1,5 @@
 /**
- * Campus Connect - Enhanced JavaScript
+ * Cloud Route - Intelligent Transportation System
  * With Bootstrap 5, Form Validation, and Complete Functionality
  */
 
@@ -185,7 +185,7 @@ async function handleLogin(event) {
         
         if (data.success) {
             // Store user data
-            localStorage.setItem('campusConnectUser', JSON.stringify(data.user));
+            localStorage.setItem('cloudRouteUser', JSON.stringify(data.user));
             currentUser = data.user;
             
             // Show success message
@@ -283,7 +283,7 @@ async function handleSignup(event) {
  */
 function logout() {
     // Clear user session
-    localStorage.removeItem('campusConnectUser');
+    localStorage.removeItem('cloudRouteUser');
     currentUser = null;
     
     // Redirect to home page
@@ -294,13 +294,13 @@ function logout() {
  * Check if user is logged in
  */
 function checkAuth() {
-    const userStr = localStorage.getItem('campusConnectUser');
+    const userStr = localStorage.getItem('cloudRouteUser');
     if (userStr) {
         try {
             currentUser = JSON.parse(userStr);
             return true;
         } catch (e) {
-            localStorage.removeItem('campusConnectUser');
+            localStorage.removeItem('cloudRouteUser');
             return false;
         }
     }
@@ -325,11 +325,11 @@ function initMap() {
     const mapElement = document.getElementById('map');
     if (!mapElement) return;
     
-    // Default location: Mbarara University
-    const mbararaUniversity = [-0.6019, 30.6574];
+    // Default location (Main Transit Hub)
+    const defaultLocation = [-0.6019, 30.6574];
     
     // Create map instance
-    map = L.map('map').setView(mbararaUniversity, 15);
+    map = L.map('map').setView(defaultLocation, 15);
     
     // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -352,11 +352,11 @@ function initMap() {
  */
 function addPickupPoints() {
     const pickupPoints = [
-        { name: 'Main Gate', lat: -0.6019, lng: 30.6574 },
-        { name: 'Library Stop', lat: -0.6025, lng: 30.6580 },
-        { name: 'Hostel Area', lat: -0.6010, lng: 30.6590 },
-        { name: 'Administration Block', lat: -0.6030, lng: 30.6570 },
-        { name: 'Town Center', lat: -0.6100, lng: 30.6600 }
+        { name: 'Main Station', lat: -0.6019, lng: 30.6574 },
+        { name: 'North Plaza', lat: -0.6025, lng: 30.6580 },
+        { name: 'East Commercial', lat: -0.6010, lng: 30.6590 },
+        { name: 'West Office Park', lat: -0.6030, lng: 30.6570 },
+        { name: 'City Center', lat: -0.6100, lng: 30.6600 }
     ];
     
     const pickupIcon = L.divIcon({

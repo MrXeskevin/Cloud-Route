@@ -351,7 +351,7 @@ class Admin {
         $stats['reports'] = $this->report->getStatistics();
         
         // Get user statistics
-        $result = $this->conn->query("SELECT COUNT(*) as count FROM users WHERE user_type = 'student'");
+        $result = $this->conn->query("SELECT COUNT(*) as count FROM users WHERE user_type = 'user'");
         $stats['registered_users'] = $result->fetch_assoc()['count'];
         
         // Get driver statistics

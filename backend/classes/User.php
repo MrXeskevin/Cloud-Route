@@ -72,7 +72,7 @@ class User {
             // Insert user into database
             $stmt = $this->conn->prepare(
                 "INSERT INTO users (name, username, email, phone, password, user_type, created_at) 
-                 VALUES (?, ?, ?, ?, ?, 'student', NOW())"
+                 VALUES (?, ?, ?, ?, ?, 'user', NOW())"
             );
             
             $stmt->bind_param("sssss", $name, $username, $email, $phone, $passwordHash);

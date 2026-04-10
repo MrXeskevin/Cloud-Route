@@ -1,7 +1,7 @@
-// Campus Connect - Service Worker
+// Cloud Route - Service Worker
 // This file handles offline caching and push notifications for PWA functionality
 
-const CACHE_NAME = 'campus-connect-v1';
+const CACHE_NAME = 'cloud-route-v1';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -110,7 +110,7 @@ self.addEventListener('push', (event) => {
     notificationData = event.data.json();
   } else {
     notificationData = {
-      title: 'Campus Connect',
+      title: 'Cloud Route',
       body: 'You have a new notification',
       icon: 'icon-192x192.png',
       badge: 'icon-192x192.png'
